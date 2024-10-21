@@ -46,12 +46,19 @@ const addActivity = async (req, res) => {
   const { name, startDate, endDate } = req.body;
 
   try {
+
     const newActivity = await prisma.activity.create({
       data: {
         name,
         startDate,
         endDate,
         scheduleId: parseInt(scheduleId),
+      },
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
       },
     });
     logger.info(`Added activity to schedule ID: ${req.params.scheduleId}`);
@@ -83,6 +90,7 @@ const addMultipleActivities = async (req, res) => {
 // Controller function to retrieve a schedule along with its activities
 const getScheduleWithActivities = async (req, res) => {
   const { scheduleId } = req.params;
+  const userId = req.user.id;
 
   try {
     const schedule = await prisma.schedule.findUnique({
@@ -90,11 +98,11 @@ const getScheduleWithActivities = async (req, res) => {
       include: { activities: true },
     });
 
-    if (!schedule) {
-      return res.status(404).json({ error: 'Schedule not found' });
+    if (!schedule || schedule.userId !== userId) {
+      return res.status(403).json({ error: 'Access denied. You do not own this schedule.' });
     }
 
-    logger.info(`Retrieved schedule with ID: ${req.params.scheduleId}`);
+    logger.info(`User ${userId} retrieved schedule with ID: ${scheduleId}`);
     res.status(200).json(schedule);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve schedule' });
