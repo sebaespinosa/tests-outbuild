@@ -1,11 +1,14 @@
+// src/app.js
 const express = require('express');
+const cors = require('cors');
 const app = express();
+const routes = require('./routes');
 
 // Middleware
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 // Routes
-const routes = require('./routes');
 app.use('/', routes);
 
 // Start the server
