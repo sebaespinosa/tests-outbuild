@@ -1,0 +1,12 @@
+// prisma/schema.prisma
+
+// Define your database models and their relationships here
+
+// Example model:
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   email     String   @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
