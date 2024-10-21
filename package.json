@@ -4,7 +4,8 @@
   "description": "A Node.js Express application with Prisma as the ORM",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "test": "npx jest"
   },
   "dependencies": {
     "@prisma/client": "^5.21.1",
