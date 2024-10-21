@@ -1,0 +1,237 @@
+openapi: 3.0.0
+info:
+  title: Outbuild Backend API
+  version: 1.0.0
+  description: A Node.js Express application with Prisma as the ORM
+servers:
+  - url: http://localhost:3000
+paths:
+  /new-empty-schedule:
+    post:
+      summary: Create a new empty schedule
+      tags:
+        - Schedules
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                imageUrl:
+                  type: string
+                userId:
+                  type: integer
+      responses:
+        '201':
+          description: Schedule created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  imageUrl:
+                    type: string
+                  userId:
+                    type: integer
+        '500':
+          description: Failed to create schedule
+
+  /create-user:
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '500':
+          description: Failed to create user
+
+  /schedules/{scheduleId}/activities:
+    post:
+      summary: Add an activity to a schedule
+      tags:
+        - Activities
+      parameters:
+        - in: path
+          name: scheduleId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                startDate:
+                  type: string
+                  format: date-time
+                endDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Activity added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  startDate:
+                    type: string
+                    format: date-time
+                  endDate:
+                    type: string
+                    format: date-time
+        '403':
+          description: Access denied
+        '500':
+          description: Failed to add activity
+
+  /schedules/{scheduleId}/activities/bulk:
+    post:
+      summary: Add multiple activities to a schedule
+      tags:
+        - Activities
+      parameters:
+        - in: path
+          name: scheduleId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  startDate:
+                    type: string
+                    format: date-time
+                  endDate:
+                    type: string
+                    format: date-time
+      responses:
+        '201':
+          description: Activities added successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    startDate:
+                      type: string
+                      format: date-time
+                    endDate:
+                      type: string
+                      format: date-time
+        '403':
+          description: Access denied
+        '500':
+          description: Failed to add activities
+
+  /schedules/{scheduleId}:
+    get:
+      summary: Retrieve a schedule along with its activities
+      tags:
+        - Schedules
+      parameters:
+        - in: path
+          name: scheduleId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Schedule retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  imageUrl:
+                    type: string
+                  userId:
+                    type: integer
+                  activities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        startDate:
+                          type: string
+                          format: date-time
+                        endDate:
+                          type: string
+                          format: date-time
+        '403':
+          description: Access denied
+        '500':
+          description: Failed to retrieve schedule
+
+  /seed:
+    post:
+      summary: Seed the database
+      tags:
+        - Database
+      responses:
+        '201':
+          description: Database seeded successfully
+        '500':
+          description: Failed to seed database
