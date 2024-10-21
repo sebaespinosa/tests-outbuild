@@ -57,6 +57,7 @@ With that being said, here are some considerations for the solution.
 - Used Prisma as the ORM instead of direct actions against the database. To keep it simple I just use int as the ID instead of uuid.
 - No "advance" script was added to package.json to start the project
 - No semantic commits and other best practices where used
+- No vulnerabilities checks where apply to keep it simple.
 
 ## Project Start
 
