@@ -1,6 +1,7 @@
 // controllers/index.js
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const logger = require('../logger');
 
 // Controller function to create a schedule
 const createEmptySchedule = async (req, res) => {
@@ -14,6 +15,7 @@ const createEmptySchedule = async (req, res) => {
         userId,
       },
     });
+    logger.info('Created a new empty schedule');
     res.status(201).json(newSchedule);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create schedule' });
@@ -31,6 +33,7 @@ const createUser = async (req, res) => {
         email,
       },
     });
+    logger.info(`Created a new user with email: ${req.body.email}`);
     res.status(201).json({ id: newUser.id });
   } catch (error) {
     res.status(500).json({ error: 'Failed to create user' });
@@ -51,6 +54,7 @@ const addActivity = async (req, res) => {
         scheduleId: parseInt(scheduleId),
       },
     });
+    logger.info(`Added activity to schedule ID: ${req.params.scheduleId}`);
     res.status(201).json(newActivity);
   } catch (error) {
     res.status(500).json({ error: 'Failed to add activity' });
@@ -69,6 +73,7 @@ const addMultipleActivities = async (req, res) => {
         scheduleId: parseInt(scheduleId),
       })),
     });
+    logger.info(`Added multiple activities to schedule ID: ${req.params.scheduleId}`);
     res.status(201).json(newActivities);
   } catch (error) {
     res.status(500).json({ error: 'Failed to add activities' });
@@ -89,6 +94,7 @@ const getScheduleWithActivities = async (req, res) => {
       return res.status(404).json({ error: 'Schedule not found' });
     }
 
+    logger.info(`Retrieved schedule with ID: ${req.params.scheduleId}`);
     res.status(200).json(schedule);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve schedule' });
@@ -111,6 +117,7 @@ const seedDatabase = async (req, res) => {
       },
     });
 
+    logger.info('Seeded the database');
     res.status(201).json({ message: 'Database seeded successfully', user: newUser });
   } catch (error) {
     res.status(500).json({ error: 'Failed to seed database' });
